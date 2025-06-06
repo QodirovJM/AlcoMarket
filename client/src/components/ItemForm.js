@@ -8,6 +8,7 @@ function ItemForm() {
   const [price, setPrice] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState('');
+  const [category, setCategory] = useState('Крепкий алкоголь');
 
   const navigate = useNavigate();
   const { id } = useParams(); // если есть id — редактируем
@@ -24,6 +25,7 @@ function ItemForm() {
         setDescription(item.description);
         setPrice(item.price || '');
         setImageUrl(item.image_url || '');
+        setCategory(item.category || 'Крепкий алкоголь');
       })
       .catch(() => setError('Не удалось загрузить данные'));
     }
@@ -32,7 +34,7 @@ function ItemForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    const data = { name, description, price, image_url: imageUrl };
+    const data = { name, description, price, image_url: imageUrl, category };
 
     try {
       if (id) {
@@ -75,6 +77,16 @@ function ItemForm() {
           <label className="form-label">URL изображения</label>
           <input type="url" className="form-control" value={imageUrl} onChange={e => setImageUrl(e.target.value)} />
         </div>
+
+        <div className="mb-3">
+          <label className="form-label">Категория</label>
+          <select className="form-select" value={category} onChange={e => setCategory(e.target.value)} required>
+            <option value="Крепкий алкоголь">Крепкий алкоголь</option>
+            <option value="Вино">Вино</option>
+            <option value="Пиво">Пиво</option>
+          </select>
+        </div>
+
 
         <button type="submit" className="btn btn-primary">{id ? 'Сохранить изменения' : 'Добавить товар'}</button>
       </form>

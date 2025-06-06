@@ -8,10 +8,12 @@ function verifyToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) return res.status(403).json({ error: 'Недействительный токен' });
-
     req.user = decoded;
     next();
   });
+
+  
+
 }
 
 module.exports = verifyToken;

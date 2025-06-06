@@ -8,10 +8,11 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   const hashed = await bcrypt.hash(password, 10);
+  const role = 'user'; 
   try {
     await db.query(
-      'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3)',
-      [username, email, hashed]
+      'INSERT INTO users (username, email, password_hash, role) VALUES ($1, $2, $3, $4)',
+      [username, email, hashed, role]
     );
     res.status(201).json({ message: 'Пользователь зарегистрирован' });
   } catch (err) {
@@ -31,8 +32,13 @@ router.post('/login', async (req, res) => {
     const match = await bcrypt.compare(password, user.password_hash);
     if (!match) return res.status(401).json({ error: 'Неверный пароль' });
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    const token = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+    res.json({ token, role: user.role });
+
   } catch (err) {
     res.status(500).json({ error: 'Ошибка входа', detail: err.message });
   }

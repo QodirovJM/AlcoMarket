@@ -7,6 +7,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  background: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+  background-size: cover;
+  color: white;
+}
+
+body {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
